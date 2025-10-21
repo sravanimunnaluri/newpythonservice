@@ -627,7 +627,7 @@ def final_report(state: FGState) -> FGState:
     # with the above structure generate the report and company name on top center of the report "BLEND COLOURS" 
     # NOTE - "ONLY REPORT SHOULD BE IN THE OUTPUT DONOT INCLUDE ANY OTHER CHARACTERS OR ANYOTHER EXTRA CONTENT"
     # """
-    # llm = ChatOpenAI(model="gpt-4o", openai_api_key="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")
+    # llm = ChatOpenAI(model="gpt-4o", openai_api_key="openai_api_key")
     # response = llm.invoke([SystemMessage(content="You are a professional ETD report generator that creates clear, structured, tabular dispatch reports. Format everything precisely."),HumanMessage(content=prompt)])
     state["final_report"] = "generated"#response.content
     return state

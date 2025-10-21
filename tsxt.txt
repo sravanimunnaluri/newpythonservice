@@ -20,7 +20,7 @@ def final_report(state: FGState) -> FGState:
     Alternatives: {state.get('alternatives', {})}
     Format the output in clean markdown table.
     """
-    llm = ChatOpenAI(model="gpt-4o", openai_api_key="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")
+    llm = ChatOpenAI(model="gpt-4o", openai_api_key=openai_api_key)
     response = llm.invoke([HumanMessage(content=prompt)])
     state["final_report"] = response.content
     return state

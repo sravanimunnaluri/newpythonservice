@@ -22,7 +22,7 @@ print("✅ Connected successfully!")
 
 # client = Groq(
 #     # This is the default and can be omitted
-#     api_key= "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",
+#   
 # )
 
 # # you are a helpful sql assistant who acan write the sql query and just give the sql query as output and databse is like there is only one table called AlternateProductsUsedInProduction with columns VoucherSeries,VoucherNo,BillOfMaterial,ActualBOMInputProduct,UsedProduct,Quantity. donot use LIMIT and give the sql query in single line
