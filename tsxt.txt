@@ -1,0 +1,53 @@
+get customer name and fg and quantity
+check fg quantity available from sql
+if it is available then generate report 
+if it is not available then get the bom
+then check the availability of RM
+if it is available then generate the report
+if it is not available then fetch the alternative RM;
+check if the RM stock is available
+if not then send the message as RM's not available 
+then generate the enitre report using LLM
+
+def final_report(state: FGState) -> FGState:
+    prompt = f"""
+    Generate a final dispatch readiness report.
+    Input JSON: {state['input_json']}
+    FG Available Qty: {state['fg_available_qty']}
+    BOM: {state.get('bom_result', [])}
+    RM Availability: {state.get('rm_availability', [])}
+    Missing RMs: {state.get('rm_missing', [])}
+    Alternatives: {state.get('alternatives', {})}
+    Format the output in clean markdown table.
+    """
+    llm = ChatOpenAI(model="gpt-4o", openai_api_key="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")
+    response = llm.invoke([HumanMessage(content=prompt)])
+    state["final_report"] = response.content
+    return state
+
+
+
+
+select 
+	bom.VoucherLineNo Sno
+	,bom.MasterName BillOfMaterial
+	,bom.Product
+	,bom.Unit
+	,bom.InputProduct
+	,bom.InputUnit
+	,bom.InputQuantity
+	,bom.InputQtyCF
+	,bom.InputQtyInBaseUOM
+	,(bom.InputQtyInBaseUOM * {qty}) QtyRequired
+	,bom.Comments PercentOfMaterial
+	,stkbal.Balance
+	,stkbal.Balance - (bom.InputQtyInBaseUOM * {qty}) ShortQty
+into #BOMDetails
+from 
+	Master_BillsOfMaterial_Table bom
+		left join (select Product,sum(isnull(receivedqty,0)-isnull(issuedqty,0)) Balance 
+					from StockLedger_Table group by Product) stkbal on stkbal.Product = bom.InputProduct
+where  
+	bom.Product  = {fg}
+order by
+	sno
