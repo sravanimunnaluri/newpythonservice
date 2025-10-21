@@ -1,7 +1,4 @@
-import sys
-if getattr(sys, 'frozen', False):
-    import importlib.metadata
-importlib.metadata.distribution = lambda name: type('dummy', (), {'version':'0'})()
+
 import re
 import streamlit as st
 from etd_new import graph 
